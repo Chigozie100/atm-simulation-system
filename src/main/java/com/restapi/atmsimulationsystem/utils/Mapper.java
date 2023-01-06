@@ -14,13 +14,4 @@ public class Mapper {
         return user;
     }
 
-    public static UserResponseDto mapToDto(User user){
-        UserResponseDto responseDto = new UserResponseDto();
-        responseDto.setFullName(user.getFullName());
-        responseDto.setAccountNumber(user.getAccountNumber());
-        responseDto.setPin(user.getPin());
-        responseDto.setCardNo(user.getCardNo());
-        responseDto.setAmount(user.getAmount());
-        return responseDto;
-    }
 }

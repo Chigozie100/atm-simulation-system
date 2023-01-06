@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 @SpringBootApplication
 public class AtmSimulationSystemApplication implements CommandLineRunner {
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AtmSimulationSystemApplication.class, args);
@@ -23,8 +25,13 @@ public class AtmSimulationSystemApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		userRepository.save(new User("john", 5886, 8067, 56, Role.USER));
-
-		userRepository.save(new User("doe", 45543, 908, 80, Role.USER));
+		int a=65;
+		char c=(char)a;
+		if(!(userRepository.findAll().size() > 0)) {
+			userRepository.save(new User("john", "john@gamil.com", 5886,
+					passwordEncoder.encode("87"), passwordEncoder.encode("565"), Role.USER));
+			userRepository.save(new User("doe", "doe@gmail.com", 45543,
+					passwordEncoder.encode("87"), passwordEncoder.encode("876"), Role.USER));
+		}
 	}
 }

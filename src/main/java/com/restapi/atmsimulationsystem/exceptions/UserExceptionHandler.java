@@ -12,5 +12,10 @@ public class UserExceptionHandler {
     public ResponseEntity<APIResponse> droneNotFound(UserNotFoundException ex){
         return Responder.notFound(ex.getMessage());
     }
+
+    @ExceptionHandler(InsufficientFundException.class)
+    public ResponseEntity<APIResponse> droneOverloaded(InsufficientFundException ex){
+        return Responder.notFound(ex.getMessage());
+    }
 }
 

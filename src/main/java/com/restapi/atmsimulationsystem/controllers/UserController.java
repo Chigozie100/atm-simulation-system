@@ -1,5 +1,6 @@
 package com.restapi.atmsimulationsystem.controllers;
 
+import com.restapi.atmsimulationsystem.payload.requests.UserAmountRequestDto;
 import com.restapi.atmsimulationsystem.payload.requests.UserRequestDto;
 import com.restapi.atmsimulationsystem.payload.responses.APIResponse;
 import com.restapi.atmsimulationsystem.service.UserService;
@@ -7,6 +8,8 @@ import com.restapi.atmsimulationsystem.utils.Responder;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RequestMapping("/v1/api/")
 @RestController
@@ -29,8 +32,20 @@ public class UserController {
 
     @PostMapping("/depositMoney/{id}")
     public String depositMoney(@PathVariable (name = "id") Long id,
-                               @RequestParam Integer amount){
+                               @RequestBody UserAmountRequestDto amount){
         service.depositMoney(id, amount);
         return "money deposited succcessfully";
+    }
+
+    @GetMapping("/withdrawMoney/{id}")
+    public String withdrawMoney(@PathVariable (name = "id") Long id,
+                                @RequestParam (name = "amount") BigDecimal amount){
+        service.withdrawMoney(id, amount);
+        return "withdrawal successful";
+    }
+
+    @GetMapping("/checkBalance/{id}")
+    public ResponseEntity<APIResponse> checkBalance(@PathVariable (name = "id") Long id){
+        return responder.okay(service.checkAccountBalance(id));
     }
 }

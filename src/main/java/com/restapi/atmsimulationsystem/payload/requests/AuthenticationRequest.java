@@ -1,18 +1,15 @@
 package com.restapi.atmsimulationsystem.payload.requests;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestDto {
+public class AuthenticationRequest {
     private String fullName;
-    private String email;
-    private Integer accountNumber;
-    private String pin;
-    private String cardNo;
+    String email;
 }
