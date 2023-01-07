@@ -14,11 +14,11 @@ public interface UserService {
 
     User updateUser(Long id, UserRequestDto requestDto);
 
-    void depositMoney(Long id, UserAmountRequestDto requestDto);
+    void depositMoney(UserAmountRequestDto requestDto);
 
-    void withdrawMoney(Long id, BigDecimal amount);
+    void withdrawMoney(BigDecimal amount);
 
-    UserResponseDto checkAccountBalance(Long id);
+    UserResponseDto checkAccountBalance();
 
 
 }

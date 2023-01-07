@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@RequestMapping("/v1/api/")
+@RequestMapping("/api/v1/")
 @RestController
 @AllArgsConstructor
 public class UserController {
@@ -30,22 +30,20 @@ public class UserController {
         return responder.okay(service.updateUser(id, requestDto));
     }
 
-    @PostMapping("/depositMoney/{id}")
-    public String depositMoney(@PathVariable (name = "id") Long id,
-                               @RequestBody UserAmountRequestDto amount){
-        service.depositMoney(id, amount);
+    @PostMapping("/depositMoney")
+    public String depositMoney(@RequestBody UserAmountRequestDto amount){
+        service.depositMoney(amount);
         return "money deposited succcessfully";
     }
 
-    @GetMapping("/withdrawMoney/{id}")
-    public String withdrawMoney(@PathVariable (name = "id") Long id,
-                                @RequestParam (name = "amount") BigDecimal amount){
-        service.withdrawMoney(id, amount);
+    @GetMapping("/withdrawMoney")
+    public String withdrawMoney(@RequestParam (name = "amount") BigDecimal amount){
+        service.withdrawMoney(amount);
         return "withdrawal successful";
     }
 
-    @GetMapping("/checkBalance/{id}")
-    public ResponseEntity<APIResponse> checkBalance(@PathVariable (name = "id") Long id){
-        return responder.okay(service.checkAccountBalance(id));
+    @GetMapping("/checkBalance")
+    public ResponseEntity<APIResponse> checkBalance(){
+        return responder.okay(service.checkAccountBalance());
     }
 }

@@ -25,13 +25,14 @@ public class AtmSimulationSystemApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		int a=65;
-		char c=(char)a;
 		if(!(userRepository.findAll().size() > 0)) {
 			userRepository.save(new User("john", "john@gamil.com", 5886,
 					passwordEncoder.encode("87"), passwordEncoder.encode("565"), Role.USER));
 			userRepository.save(new User("doe", "doe@gmail.com", 45543,
 					passwordEncoder.encode("87"), passwordEncoder.encode("876"), Role.USER));
+
+			userRepository.save(new User("smith", "smith@gmail.com", 87652,
+					passwordEncoder.encode("90"), passwordEncoder.encode("76"), Role.USER));
 		}
 	}
 }

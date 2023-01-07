@@ -5,29 +5,30 @@ import com.restapi.atmsimulationsystem.exceptions.UserNotFoundException;
 import com.restapi.atmsimulationsystem.model.User;
 import com.restapi.atmsimulationsystem.payload.requests.AuthenticationRequest;
 import com.restapi.atmsimulationsystem.payload.requests.RegisterRequest;
-import com.restapi.atmsimulationsystem.payload.responses.AuthenticationResponse;
 import com.restapi.atmsimulationsystem.repository.UserRepository;
 import com.restapi.atmsimulationsystem.security.JwtService;
 import com.restapi.atmsimulationsystem.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService{
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public AuthenticationResponse register(RegisterRequest request) {
+    public void register(RegisterRequest request) {
         Optional<User> userExist =repository.findByEmail(request.getEmail());
 
         if (userExist.isPresent()){
@@ -39,17 +40,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPin(passwordEncoder.encode(request.getPin()));
         user.setRole(Role.ADMIN);
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),
-                request.getFullName()));
-        var user = repository.findByEmail(request.getEmail()).orElseThrow(()-> new UsernameNotFoundException("user not found"));
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+   @Override
+    public String authenticate(AuthenticationRequest request) throws AuthenticationException {
+       Authentication auth=authenticationManager.authenticate(
+               new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPin()));
+
+       if(auth.isAuthenticated()){
+           String jwt = "Bearer: " + JwtService.generateToken
+                   (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getPin(), new ArrayList<>()));
+           return jwt;
+       } else {
+           throw new AuthenticationException("cardNo or pin Not Authenticated");
+       }
     }
 
 }
