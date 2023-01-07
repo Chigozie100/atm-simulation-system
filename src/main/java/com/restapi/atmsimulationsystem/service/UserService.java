@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 public interface UserService {
 
-    void deleteUser(Long id);
+    String deleteUser(Long id);
 
     User updateUser(Long id, UserRequestDto requestDto);
 

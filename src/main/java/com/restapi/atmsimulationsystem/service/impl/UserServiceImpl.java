@@ -20,8 +20,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public void deleteUser(Long id) {
+    public String deleteUser(Long id) {
         userRepository.deleteById(id);
+        return null;
     }
 
     @Override
@@ -59,7 +60,6 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto checkAccountBalance() {
         String email=UserDetails.getLoggedInUserDetails();
         User user=userRepository.findByEmail(email).orElseThrow(()-> new UserNotFoundException("email does not exist"));
-        //User user=userRepository.findById(id).orElseThrow(()->new UserNotFoundException("user not found"));
         UserResponseDto responseDto = new UserResponseDto();
         responseDto.setAmount(user.getAmount());
         return responseDto;
